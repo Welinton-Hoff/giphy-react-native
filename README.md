@@ -12,11 +12,11 @@ Typescript<br />
 Styled-components<br />
 
 To run the project on your machine, simply clone it.<br />
-Run **yarn** in the project root to install the project's dependencies.<br />
-Don't forget to create the **.env** file with the same data as the **.env.example** file made available.<br />
+Run `yarn` in the project root to install the project's dependencies.<br />
+Don't forget to create the `.env` file with the same data as the `.env.example` file made available.<br />
 
-After performing these steps above, for the Android environment, run **yarn android**.<br />
+After performing these steps above, for the Android environment, run `yarn android`.<br />
 If you want to run the project in an iOS environment, still in the root directory,<br />
-run the **npx pod-install** command. After this process is complete, run **yarn ios**.<br /><br />
+run the `npx pod-install` command. After this process is complete, run `yarn ios`.<br /><br />
 
 Enjoy!
