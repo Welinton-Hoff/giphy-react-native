@@ -2,9 +2,12 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:giphyapp.xcodeproj">
+      location = "group:/Users/welintonhoff/workspace/personal/giphy-app/ios/giphyapp.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Pods/Pods.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:giphyapp.xcodeproj">
    </FileRef>
 </Workspace>
