@@ -5,19 +5,14 @@ import { PageView } from "../../components/PageView";
 import { GifViewer } from "../../components/GifViewer";
 import { FailureModal } from "../../components/FailureModal";
 
-import { useRandomGif } from "../../zustand/randomGif";
 import { useSearchGif } from "../../zustand/searchGif";
 
-import { Container, TitleContainer } from "./styles";
-
-const FETCH_INTERVAL = 10000;
+import * as S from "./styles";
+import { useRandomGif } from "./hooks/useRandomGif";
 
 export function DashboardPage() {
-  const {
-    getRandomGif,
-    data: randomGifData,
-    error: randomGifError,
-  } = useRandomGif();
+  const { error, response, fetchRandomGif, clearFetchInterval } =
+    useRandomGif();
 
   const {
     searchQuery,
@@ -29,91 +24,63 @@ export function DashboardPage() {
     loading: searchLoading,
   } = useSearchGif();
 
-  const [isFailureModalVisible, updateFailureModalVisibility] = useState(false);
-  const [fetchInterval, updateFetchInterval] = useState<
-    NodeJS.Timeout | number
-  >(0);
+  const [isFailureModalVisible, setIsFailureModalVisible] = useState(false);
 
   const hasApiError = useMemo(() => {
-    return (
-      (!!searchError && searchError !== "") ||
-      (!!randomGifError && randomGifError !== "")
-    );
-  }, [searchError, randomGifError]);
+    return (!!searchError && searchError !== "") || error;
+  }, [searchError, error]);
 
   const isSearchTriggerActive = useMemo(() => {
     return isSearchFieldFocused || !!searchData?.length;
   }, [searchData, isSearchFieldFocused]);
 
   const gifViewerData = useMemo(() => {
-    return isSearchTriggerActive ? searchData : randomGifData;
-  }, [searchData, randomGifData, isSearchTriggerActive]);
+    return isSearchTriggerActive ? searchData : response;
+  }, [searchData, response, isSearchTriggerActive]);
 
   const title = useMemo(() => {
     return isSearchTriggerActive ? "Search results:" : "Random selected GIF:";
   }, [isSearchTriggerActive]);
 
   const onClearFetchInterval = useCallback(() => {
-    clearInterval(fetchInterval);
+    clearFetchInterval();
     setSearchFieldFocus(true);
-  }, [fetchInterval]);
+  }, [clearFetchInterval]);
 
-  const handleFetchInterval = useCallback((): void => {
-    if (searchQuery === "" && isSearchTriggerActive) {
-      onStartFetchInterval();
-    }
-  }, [searchQuery, isSearchTriggerActive]);
-
-  function onStartFetchInterval(): void {
-    getRandomGif();
+  const onRestartFetchInterval = useCallback(() => {
+    fetchRandomGif();
     clearSearchData();
     setSearchFieldFocus(false);
+  }, [fetchRandomGif, clearSearchData]);
 
-    const newInterval = setInterval(() => {
-      getRandomGif();
-    }, FETCH_INTERVAL);
-
-    updateFetchInterval(newInterval);
-  }
+  const handleFetchInterval = useCallback((): void => {
+    if (!searchQuery && isSearchTriggerActive) onRestartFetchInterval();
+  }, [searchQuery, onRestartFetchInterval, isSearchTriggerActive]);
 
   function onUpdateFailureModalVisibility(): void {
-    updateFailureModalVisibility((oldState) => !oldState);
+    setIsFailureModalVisible((oldState) => !oldState);
   }
 
   useEffect(() => {
-    getRandomGif();
-
-    const newFetchInterval = setInterval(() => {
-      getRandomGif();
-    }, FETCH_INTERVAL);
-
-    updateFetchInterval(newFetchInterval);
-
-    return () => clearInterval(newFetchInterval);
-  }, []);
-
-  useEffect(() => {
-    if (!!hasApiError) {
-      onUpdateFailureModalVisibility();
-    }
+    if (hasApiError) onUpdateFailureModalVisibility();
   }, [hasApiError]);
 
   return (
     <PageView disableHeader>
-      <Container>
+      <S.Container>
         <Search
           fieldOnBlur={handleFetchInterval}
           fieldOnFocus={onClearFetchInterval}
-          fetchInterval={onStartFetchInterval}
+          fetchInterval={onRestartFetchInterval}
         />
 
-        <TitleContainer>{title}</TitleContainer>
+        <S.TitleContainer>{title}</S.TitleContainer>
         <GifViewer gif={gifViewerData} isLoading={searchLoading} />
-      </Container>
+      </S.Container>
 
       <FailureModal
+        message={error ?? searchError}
         visible={isFailureModalVisible}
-        message={randomGifError || searchError}
         onClose={onUpdateFailureModalVisibility}
       />
     </PageView>

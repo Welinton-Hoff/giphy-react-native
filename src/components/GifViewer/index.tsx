@@ -10,13 +10,10 @@ interface IGifViewerProps {
   gif: IGifs | IGifs[] | null;
 }
 
-export function GifViewer({ gif, isLoading }: IGifViewerProps) {
+export function GifViewer({ gif, isLoading }: Readonly<IGifViewerProps>) {
   if (!gif) return null;
   if (isLoading) return <Loader isLoading={isLoading} />;
 
-  if (!Array.isArray(gif)) {
-    return <SingleGifViewer gif={gif} />;
-  }
-
+  if (!Array.isArray(gif)) return <SingleGifViewer gif={gif} />;
   return <MultipleGifViewer gif={gif} />;
 }
