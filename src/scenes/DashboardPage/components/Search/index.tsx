@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useMemo, useRef } from "react";
 import { Button } from "../../../../components/Button";
 import { TextField } from "../../../../components/TextField";
 
-import useDebounce from "../../../../hooks/useDebounce";
+import { useDebounce } from "../../../../hooks/useDebounce";
 import { useSearchGif } from "../../../../zustand/searchGif";
 
 import {
@@ -27,7 +27,7 @@ interface ISearchProps {
   fetchInterval: () => void;
 }
 
-export function Search(props: ISearchProps) {
+export function Search(props: Readonly<ISearchProps>) {
   const { fieldOnBlur, fieldOnFocus, fetchInterval } = props;
 
   const {
