@@ -1,25 +1,14 @@
-import { Animated, Dimensions, Keyboard } from "react-native";
-import React, { useCallback, useEffect, useMemo, useRef } from "react";
+import { Keyboard } from "react-native";
+import React, { useCallback, useEffect } from "react";
 
-import { Button } from "../../../../components/Button";
-import { TextField } from "../../../../components/TextField";
+import { Button } from "src/components/Button";
+import { TextField } from "src/components/TextField";
 
-import { useDebounce } from "../../../../hooks/useDebounce";
-import { useSearchGif } from "../../../../zustand/searchGif";
+import { useDebounce } from "src/hooks/useDebounce";
+import { useSearchGif } from "src/zustand/searchGif";
+import { useSearchAnimation } from "./hooks/useSearchAnimation";
 
-import {
-  Container,
-  SearchIcon,
-  ButtonWrapper,
-  TextFieldWrapper,
-  ButtonViewAnimated,
-  TextFieldViewAnimated,
-} from "./styles";
-
-const DEBOUNCE_VALUE = 1000;
-const ANIMATION_DURATION = 300;
-const ANIMATION_DISPLACEMENT_VALUE = 300;
-const SCREEN_WIDTH = Dimensions.get("screen").width - 48;
+import * as S from "./styles";
 
 interface ISearchProps {
   fieldOnBlur: () => void;
@@ -39,55 +28,30 @@ export function Search(props: Readonly<ISearchProps>) {
     isSearchFieldFocused,
   } = useSearchGif();
 
-  const debouncedValue = useDebounce<string>(searchQuery ?? "", DEBOUNCE_VALUE);
-  const searchContainerAnimationValue = useRef(
-    new Animated.Value(SCREEN_WIDTH)
-  ).current;
+  const { handleAnimation, searchContainerWidth, buttonContainerOpacity } =
+    useSearchAnimation();
 
-  const buttonViewOpacity = useMemo(() => {
-    return searchContainerAnimationValue.interpolate({
-      inputRange: [SCREEN_WIDTH - ANIMATION_DISPLACEMENT_VALUE, SCREEN_WIDTH],
-      outputRange: [1, 0],
-    });
-  }, [SCREEN_WIDTH, searchContainerAnimationValue]);
+  const debouncedValue = useDebounce<string>(searchQuery ?? "");
 
-  const handleSearchContainerAnimation = useCallback((): void => {
-    const searchContainerExpanded = SCREEN_WIDTH;
-    const searchContainerContracted =
-      searchContainerExpanded - ANIMATION_DISPLACEMENT_VALUE;
-
-    const animationValue = isSearchFieldFocused
-      ? searchContainerContracted
-      : searchContainerExpanded;
-
-    Animated.timing(searchContainerAnimationValue, {
-      useNativeDriver: false,
-      toValue: animationValue,
-      duration: ANIMATION_DURATION,
-    }).start();
-  }, [SCREEN_WIDTH, isSearchFieldFocused]);
-
-  function onClearField(): void {
+  const onClearField = useCallback((): void => {
     clearSearchData();
     updateSearchQuery("");
-  }
+  }, [clearSearchData, updateSearchQuery]);
 
-  function onSearchCancel(): void {
+  const onSearchCancel = useCallback((): void => {
     onClearField();
     fetchInterval();
     Keyboard.dismiss();
     setSearchFieldFocus(false);
-  }
+  }, [onClearField, fetchInterval, setSearchFieldFocus]);
 
   useEffect(() => {
-    handleSearchContainerAnimation();
-  }, [isSearchFieldFocused]);
+    handleAnimation(isSearchFieldFocused);
+  }, [isSearchFieldFocused, handleAnimation]);
 
   useEffect(() => {
-    if (debouncedValue?.length >= 2) {
-      getSearchGifs(debouncedValue);
-    }
-  }, [debouncedValue]);
+    if (debouncedValue?.length >= 2) getSearchGifs(debouncedValue);
+  }, [debouncedValue, getSearchGifs]);
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
@@ -106,26 +70,26 @@ export function Search(props: Readonly<ISearchProps>) {
   }, []);
 
   return (
-    <Container>
-      <TextFieldViewAnimated style={{ width: searchContainerAnimationValue }}>
-        <TextFieldWrapper>
+    <S.Container>
+      <S.TextFieldViewAnimated style={{ width: searchContainerWidth }}>
+        <S.TextFieldWrapper>
           <TextField
             value={searchQuery}
             placeholder="Search"
             onBlur={fieldOnBlur}
-            leftIcon={SearchIcon}
+            leftIcon={S.SearchIcon}
             onFocus={fieldOnFocus}
             onClear={onClearField}
             onChangeText={updateSearchQuery}
           />
-        </TextFieldWrapper>
-      </TextFieldViewAnimated>
+        </S.TextFieldWrapper>
+      </S.TextFieldViewAnimated>
 
-      <ButtonViewAnimated style={{ opacity: buttonViewOpacity }}>
-        <ButtonWrapper>
+      <S.ButtonViewAnimated style={{ opacity: buttonContainerOpacity }}>
+        <S.ButtonWrapper>
           <Button label="Cancel" onPress={onSearchCancel} />
-        </ButtonWrapper>
-      </ButtonViewAnimated>
-    </Container>
+        </S.ButtonWrapper>
+      </S.ButtonViewAnimated>
+    </S.Container>
   );
 }
