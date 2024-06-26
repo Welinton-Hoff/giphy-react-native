@@ -1,11 +1,11 @@
-import { ERating } from "../../@types/gifs";
+import { EGifRating } from "../../@types/gifs";
 
-function getRatingAge(rating: ERating) {
+function getRatingAge(rating: EGifRating) {
   const ratingTemplate = {
-    [ERating.G]: "0 +",
-    [ERating.R]: "18 +",
-    [ERating.PG]: "12 +",
-    [ERating.PG_13]: "16 +",
+    [EGifRating.G]: "0 +",
+    [EGifRating.R]: "18 +",
+    [EGifRating.PG]: "12 +",
+    [EGifRating.PG_13]: "16 +",
   };
 
   return ratingTemplate[rating];

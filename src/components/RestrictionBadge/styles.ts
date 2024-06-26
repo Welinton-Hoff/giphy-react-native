@@ -1,18 +1,18 @@
 import styled from "styled-components/native";
 
 import theme from "../../theme";
-import { ERating } from "../../@types/gifs";
+import { EGifRating } from "../../@types/gifs";
 
 interface IContainerProps {
-  rating: ERating;
+  rating: EGifRating;
 }
 
-const getContainerColor = (rating: ERating) => {
+const getContainerColor = (rating: EGifRating) => {
   const colorTemplate = {
-    [ERating.R]: theme.colors.black,
-    [ERating.G]: theme.colors.success,
-    [ERating.PG]: theme.colors.warning,
-    [ERating.PG_13]: theme.colors.primary,
+    [EGifRating.R]: theme.colors.black,
+    [EGifRating.G]: theme.colors.success,
+    [EGifRating.PG]: theme.colors.warning,
+    [EGifRating.PG_13]: theme.colors.primary,
   };
 
   return colorTemplate[rating];

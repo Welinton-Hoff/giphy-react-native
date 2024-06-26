@@ -1,14 +1,14 @@
 import React, { useMemo } from "react";
 
-import { ERating } from "../../@types/gifs";
+import { EGifRating } from "../../@types/gifs";
 import { getRatingAge } from "../../utils/rating";
 import { AgeRestrictionBadge, Container } from "./styles";
 
 interface IRestrictionBadgeProps {
-  rating: ERating;
+  rating: EGifRating;
 }
 
-export function RestrictionBadge({ rating }: IRestrictionBadgeProps) {
+export function RestrictionBadge({ rating }: Readonly<IRestrictionBadgeProps>) {
   const ageRestriction = useMemo(() => {
     return getRatingAge(rating);
   }, [rating]);
