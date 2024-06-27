@@ -1,16 +1,16 @@
 import React, { useCallback } from "react";
+import { useNavigation } from "@react-navigation/native";
 import { FlatList, Image, ListRenderItem } from "react-native";
 
+import { IGifs } from "src/@types/gifs";
 import { Card, Container } from "./styles";
-import { IGifs } from "../../../../@types/gifs";
-import { useNavigation } from "@react-navigation/native";
 
 interface IGifViewerProps {
   gif: IGifs[] | null;
 }
 
 export function MultipleGifViewer({ gif }: IGifViewerProps) {
-  const navigation = useNavigation();
+  const { navigate } = useNavigation();
 
   const renderItem: ListRenderItem<IGifs> = useCallback(
     ({ item }) => (
@@ -25,9 +25,7 @@ export function MultipleGifViewer({ gif }: IGifViewerProps) {
   );
 
   function onDetailPageNavigate(gifId: string): void {
-    navigation.navigate("DetailPage", {
-      gifId,
-    });
+    navigate("DetailPage", { gifId });
   }
 
   return (

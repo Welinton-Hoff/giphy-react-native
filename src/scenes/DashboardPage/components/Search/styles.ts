@@ -10,10 +10,6 @@ export const Container = styled.View`
   justify-content: space-between;
 `;
 
-export const TextFieldWrapper = styled.View``;
-
-export const TextFieldViewAnimated = styled(Animated.View)``;
-
 export const SearchIcon = styled(SearchSvg).attrs({
   width: 22,
   height: 22,

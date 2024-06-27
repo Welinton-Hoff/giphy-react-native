@@ -2,8 +2,8 @@ import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 
 import { Slice, State } from "./types";
+import { getGifById } from "src/service/network/gif";
 import { dispatchAxiosError } from "../../utils/axios";
-import { getGifById } from "../../service/network/gifDetail";
 
 const initialState: State = {
   data: null,

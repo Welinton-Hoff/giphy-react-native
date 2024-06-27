@@ -1,57 +1,48 @@
-import { Keyboard } from "react-native";
 import React, { useCallback, useEffect } from "react";
+import { Animated, Keyboard, TextInputProps } from "react-native";
 
 import { Button } from "src/components/Button";
 import { TextField } from "src/components/TextField";
 
 import { useDebounce } from "src/hooks/useDebounce";
-import { useSearchGif } from "src/zustand/searchGif";
 import { useSearchAnimation } from "./hooks/useSearchAnimation";
 
 import * as S from "./styles";
+import { useGifs } from "src/zustand/gifs";
 
-interface ISearchProps {
-  fieldOnBlur: () => void;
-  fieldOnFocus: () => void;
+interface ISearchProps extends TextInputProps {
   fetchInterval: () => void;
 }
 
 export function Search(props: Readonly<ISearchProps>) {
-  const { fieldOnBlur, fieldOnFocus, fetchInterval } = props;
-
-  const {
-    searchQuery,
-    getSearchGifs,
-    clearSearchData,
-    updateSearchQuery,
-    setSearchFieldFocus,
-    isSearchFieldFocused,
-  } = useSearchGif();
-
+  const { fetchInterval, ...rest } = props;
   const { handleAnimation, searchContainerWidth, buttonContainerOpacity } =
     useSearchAnimation();
 
+  const {
+    fetchGifs,
+    searchQuery,
+    resetSearch,
+    setSearchQuery,
+    isSearchActive,
+    clearSearchData,
+  } = useGifs();
+
   const debouncedValue = useDebounce<string>(searchQuery ?? "");
 
-  const onClearField = useCallback((): void => {
-    clearSearchData();
-    updateSearchQuery("");
-  }, [clearSearchData, updateSearchQuery]);
-
   const onSearchCancel = useCallback((): void => {
-    onClearField();
+    resetSearch();
     fetchInterval();
     Keyboard.dismiss();
-    setSearchFieldFocus(false);
-  }, [onClearField, fetchInterval, setSearchFieldFocus]);
+  }, [resetSearch, fetchInterval]);
 
   useEffect(() => {
-    handleAnimation(isSearchFieldFocused);
-  }, [isSearchFieldFocused, handleAnimation]);
+    handleAnimation(isSearchActive);
+  }, [isSearchActive, handleAnimation]);
 
   useEffect(() => {
-    if (debouncedValue?.length >= 2) getSearchGifs(debouncedValue);
-  }, [debouncedValue, getSearchGifs]);
+    if (debouncedValue?.length >= 2) fetchGifs();
+  }, [debouncedValue, fetchGifs]);
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
@@ -71,19 +62,16 @@ export function Search(props: Readonly<ISearchProps>) {
 
   return (
     <S.Container>
-      <S.TextFieldViewAnimated style={{ width: searchContainerWidth }}>
-        <S.TextFieldWrapper>
-          <TextField
-            value={searchQuery}
-            placeholder="Search"
-            onBlur={fieldOnBlur}
-            leftIcon={S.SearchIcon}
-            onFocus={fieldOnFocus}
-            onClear={onClearField}
-            onChangeText={updateSearchQuery}
-          />
-        </S.TextFieldWrapper>
-      </S.TextFieldViewAnimated>
+      <Animated.View style={{ width: searchContainerWidth }}>
+        <TextField
+          {...rest}
+          value={searchQuery}
+          placeholder="Search"
+          leftIcon={S.SearchIcon}
+          onClear={clearSearchData}
+          onChangeText={setSearchQuery}
+        />
+      </Animated.View>
 
       <S.ButtonViewAnimated style={{ opacity: buttonContainerOpacity }}>
         <S.ButtonWrapper>

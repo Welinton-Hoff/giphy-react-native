@@ -1,20 +1,13 @@
 import { useCallback, useEffect, useState } from "react";
-import { IGifs } from "src/@types/gifs";
-import { useFetch } from "src/hooks/useFetch";
-import { getRandomGifs } from "src/service/network/randomGif";
+import { useGifs } from "src/zustand/gifs";
 
 type TFetchInterval = NodeJS.Timeout | number;
 
 const FETCH_INTERVAL = 10000;
 
 export function useRandomGif() {
+  const { fetchRandomGif } = useGifs();
   const [fetchInterval, setFetchInterval] = useState<TFetchInterval>(0);
-
-  const { refetch, ...rest } = useFetch<IGifs>({
-    queryKey: "getRandomGifs",
-    cacheTimeInMilliseconds: 0,
-    queryFunction: getRandomGifs,
-  });
 
   const clearFetchInterval = useCallback(
     () => clearInterval(fetchInterval),
@@ -22,13 +15,13 @@ export function useRandomGif() {
   );
 
   const startFetchInterval = useCallback(() => {
-    refetch();
+    fetchRandomGif();
 
     setFetchInterval((prevInterval) => {
       if (prevInterval) clearInterval(prevInterval);
-      return setInterval(() => refetch(), FETCH_INTERVAL);
+      return setInterval(() => fetchRandomGif(), FETCH_INTERVAL);
     });
-  }, [refetch]);
+  }, [fetchRandomGif]);
 
   useEffect(() => {
     startFetchInterval();
@@ -36,7 +29,6 @@ export function useRandomGif() {
   }, [startFetchInterval]);
 
   return {
-    ...rest,
     clearFetchInterval,
     fetchRandomGif: startFetchInterval,
   };
