@@ -9,6 +9,7 @@ Axios<br />
 Lottie<br />
 Zustand<br />
 Typescript<br />
+React Query<br />
 Styled-components<br />
 
 To run the project on your machine, simply clone it.<br />
