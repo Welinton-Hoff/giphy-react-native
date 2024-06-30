@@ -36,6 +36,10 @@ export function SearchInput(props: Readonly<ISearchProps>) {
     Keyboard.dismiss();
   }, [resetSearch, fetchInterval]);
 
+  const onSearchClear = useCallback((): void => {
+    setSearchQuery("");
+  }, [setSearchQuery, clearSearchData]);
+
   useEffect(() => {
     handleAnimation(isSearchActive);
   }, [isSearchActive, handleAnimation]);
@@ -68,7 +72,7 @@ export function SearchInput(props: Readonly<ISearchProps>) {
           value={searchQuery}
           placeholder="Search"
           leftIcon={S.SearchIcon}
-          onClear={clearSearchData}
+          onClear={onSearchClear}
           onChangeText={setSearchQuery}
         />
       </Animated.View>

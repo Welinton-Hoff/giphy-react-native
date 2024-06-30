@@ -18,7 +18,7 @@ interface ITextFieldProps extends TextInputProps {
   leftIcon?: React.FC<SvgProps>;
 }
 
-export function TextField(props: ITextFieldProps) {
+export function TextField(props: Readonly<ITextFieldProps>) {
   const { value, leftIcon, onChangeText, onClear, ...rest } = props;
 
   const shouldDisplayClearFieldAction = useMemo(() => {

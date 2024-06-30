@@ -44,9 +44,11 @@ export function DashboardPage() {
   );
 
   const onClearFetchInterval = useCallback(() => {
+    if (isSearchActive) return;
+
     clearFetchInterval();
     handleSearchBehavior(true);
-  }, [handleSearchBehavior, clearFetchInterval]);
+  }, [isSearchActive, handleSearchBehavior, clearFetchInterval]);
 
   const onRestartFetchInterval = useCallback(() => {
     fetchRandomGif();
@@ -74,7 +76,7 @@ export function DashboardPage() {
           fetchInterval={onRestartFetchInterval}
         />
 
-        <S.TitleContainer>{title}</S.TitleContainer>
+        <S.Title>{title}</S.Title>
         <GifViewer gif={gifData} isLoading={isFetching} />
       </S.Container>
 

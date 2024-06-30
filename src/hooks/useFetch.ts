@@ -45,7 +45,7 @@ export function useFetch<T>(props: IFetchProps<T>) {
   return {
     refetch,
     isLoading: loading,
-    response: data?.data?.data,
+    response: data?.data?.data ?? null,
     error: error ? dispatchAxiosError(error?.message) : null,
   };
 }

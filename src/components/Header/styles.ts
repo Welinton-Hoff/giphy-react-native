@@ -1,6 +1,7 @@
 import styled from "styled-components/native";
 
 export const Container = styled.View`
+  gap: 16px;
   width: 100%;
   padding: 12px 16px;
   flex-direction: row;
@@ -17,9 +18,7 @@ export const LeftSide = styled.View`
   justify-content: center;
 `;
 
-export const TouchableButton = styled.TouchableOpacity``;
-
-export const MainContent = styled.View`
+export const TitleContainer = styled.View`
   flex: 1;
   align-items: center;
   justify-content: center;

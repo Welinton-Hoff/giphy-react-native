@@ -1,13 +1,7 @@
 import React from "react";
 import { Modal, ModalProps, TouchableOpacity } from "react-native";
 
-import {
-  Label,
-  Header,
-  Container,
-  CircleCloseIcon,
-  ModalBackground,
-} from "./styles";
+import * as S from "./styles";
 
 export interface IBaseModalProps extends ModalProps {
   label?: string;
@@ -15,24 +9,24 @@ export interface IBaseModalProps extends ModalProps {
   children: React.ReactNode;
 }
 
-export function BaseModal(props: IBaseModalProps) {
+export function BaseModal(props: Readonly<IBaseModalProps>) {
   const { label, onClose, children, ...rest } = props;
 
   return (
     <Modal {...rest} transparent statusBarTranslucent>
-      <Container>
-        <ModalBackground>
-          <Header>
-            <Label>{label}</Label>
+      <S.Container>
+        <S.ModalBackground>
+          <S.Header>
+            {label && <S.Label>{label}</S.Label>}
 
             <TouchableOpacity onPress={onClose}>
-              <CircleCloseIcon />
+              <S.CircleCloseIcon />
             </TouchableOpacity>
-          </Header>
+          </S.Header>
 
           {children}
-        </ModalBackground>
-      </Container>
+        </S.ModalBackground>
+      </S.Container>
     </Modal>
   );
 }

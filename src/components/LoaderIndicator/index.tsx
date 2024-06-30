@@ -5,7 +5,9 @@ interface ILoaderIndicatorProps {
   isLoading: boolean;
 }
 
-export function LoaderIndicator({ isLoading }: ILoaderIndicatorProps) {
-  if (!isLoading) return;
+export function LoaderIndicator({
+  isLoading,
+}: Readonly<ILoaderIndicatorProps>) {
+  if (!isLoading) return null;
   return <Loader />;
 }

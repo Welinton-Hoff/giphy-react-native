@@ -1,7 +1,7 @@
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import theme from "../../theme";
+import theme from "src/theme";
 import { Header, IHeaderProps } from "../Header";
 import { IStatusBarProps, StatusBar } from "./components/StatusBar";
 
@@ -10,7 +10,7 @@ interface IPageViewProps extends IHeaderProps, IStatusBarProps {
   children: React.ReactNode;
 }
 
-export function PageView(props: IPageViewProps) {
+export function PageView(props: Readonly<IPageViewProps>) {
   const {
     children,
     backgroundColor = theme.colors.background,

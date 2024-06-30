@@ -1,18 +1,12 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { SvgProps } from "react-native-svg";
+import { TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 import { SvgIcon } from "../SvgIcon";
 import { capitalize } from "../../utils/string";
 
-import {
-  Title,
-  LeftSide,
-  Container,
-  RightSide,
-  MainContent,
-  TouchableButton,
-} from "./styles";
+import * as S from "./styles";
 
 export interface IHeaderProps {
   headerTitle?: string;
@@ -23,7 +17,7 @@ export interface IHeaderProps {
   rightIcon?: React.FC<SvgProps>;
 }
 
-export function Header(props: IHeaderProps) {
+export function Header(props: Readonly<IHeaderProps>) {
   const {
     leftIcon,
     rightIcon,
@@ -33,35 +27,32 @@ export function Header(props: IHeaderProps) {
     onRightIconPress,
   } = props;
 
-  const navigation = useNavigation();
+  const { goBack } = useNavigation();
 
-  function onBackNavigate(): void {
-    if (onLeftIconPress) {
-      return onLeftIconPress();
-    }
+  const onBackNavigate = useCallback((): void => {
+    if (onLeftIconPress) onLeftIconPress();
+    else goBack();
+  }, [onLeftIconPress, goBack]);
 
-    navigation.goBack();
-  }
-
-  if (disableHeader) return;
+  if (disableHeader) return null;
 
   return (
-    <Container>
-      <LeftSide>
-        <TouchableButton onPress={onBackNavigate}>
+    <S.Container>
+      <S.LeftSide>
+        <TouchableOpacity onPress={onBackNavigate}>
           <SvgIcon icon={leftIcon} />
-        </TouchableButton>
-      </LeftSide>
+        </TouchableOpacity>
+      </S.LeftSide>
 
-      <MainContent>
-        <Title>{capitalize(headerTitle ?? "")}</Title>
-      </MainContent>
+      <S.TitleContainer>
+        <S.Title numberOfLines={1}>{capitalize(headerTitle ?? "")}</S.Title>
+      </S.TitleContainer>
 
-      <RightSide>
-        <TouchableButton onPress={onRightIconPress}>
+      <S.RightSide>
+        <TouchableOpacity onPress={onRightIconPress}>
           <SvgIcon icon={rightIcon} />
-        </TouchableButton>
-      </RightSide>
-    </Container>
+        </TouchableOpacity>
+      </S.RightSide>
+    </S.Container>
   );
 }

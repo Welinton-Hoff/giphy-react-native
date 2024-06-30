@@ -1,10 +1,13 @@
 import React from "react";
 
-import { BaseModal } from "../BaseModal";
-import { IFailureModalProps } from "./types";
+import { BaseModal, IBaseModalProps } from "../BaseModal";
 import { Container, ErrorAnimation, FailureMessage } from "./styles";
 
-export function FailureModal(props: IFailureModalProps) {
+interface IFailureModalProps extends Omit<IBaseModalProps, "children"> {
+  message: string | null | undefined;
+}
+
+export function FailureModal(props: Readonly<IFailureModalProps>) {
   const { message, ...rest } = props;
 
   return (
@@ -12,6 +15,7 @@ export function FailureModal(props: IFailureModalProps) {
       <Container>
         <ErrorAnimation
           autoPlay
+          loop={false}
           source={require("../../assets/animations/error-animation.json")}
         />
 
