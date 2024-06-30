@@ -1,9 +1,13 @@
 import { createStackNavigator } from "@react-navigation/stack";
 
-import { DetailPage } from "../scenes/DetailPage";
-import { DashboardPage } from "../scenes/DashboardPage";
-import { SplashScreenPage } from "../scenes/SplashScreenPage";
-import { RootStackParamList } from "../@types/@react-navigation";
+import { DetailPage } from "src/scenes/DetailPage";
+import { DashboardPage } from "src/scenes/DashboardPage";
+import { SplashScreenPage } from "src/scenes/SplashScreenPage";
+
+import {
+  RootStackParamList,
+  StackRoutes as SR,
+} from "../@types/@react-navigation";
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -13,11 +17,11 @@ export function PublicRoutes() {
   return (
     <Stack.Navigator
       screenOptions={screenOptions}
-      initialRouteName="SplashScreenPage"
+      initialRouteName={SR.SplashScreenPage}
     >
-      <Stack.Screen name="DetailPage" component={DetailPage} />
-      <Stack.Screen name="DashboardPage" component={DashboardPage} />
-      <Stack.Screen name="SplashScreenPage" component={SplashScreenPage} />
+      <Stack.Screen name={SR.DetailPage} component={DetailPage} />
+      <Stack.Screen name={SR.DashboardPage} component={DashboardPage} />
+      <Stack.Screen name={SR.SplashScreenPage} component={SplashScreenPage} />
     </Stack.Navigator>
   );
 }

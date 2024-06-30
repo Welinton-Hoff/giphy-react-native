@@ -8,3 +8,9 @@ export type RootStackParamList = {
 
 export type ScreenProps<screenName extends keyof RootStackParamList> =
   StackScreenProps<RootStackParamList, screenName>;
+
+export enum StackRoutes {
+  DetailPage = "DetailPage",
+  DashboardPage = "DashboardPage",
+  SplashScreenPage = "SplashScreenPage",
+}
