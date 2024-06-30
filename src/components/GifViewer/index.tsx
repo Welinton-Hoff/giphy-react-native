@@ -5,9 +5,11 @@ import { Loader } from "./components/Loader";
 import { SingleGifViewer } from "./components/SingleGifViewer";
 import { MultipleGifViewer } from "./components/MultipleGifViewer";
 
+type TGif = IGifs | IGifs[] | null;
+
 interface IGifViewerProps {
+  gif: TGif;
   isLoading?: boolean;
-  gif: IGifs | IGifs[] | null;
 }
 
 export function GifViewer({ gif, isLoading }: Readonly<IGifViewerProps>) {

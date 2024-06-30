@@ -1,8 +1,8 @@
 import styled from "styled-components/native";
 
 export const Container = styled.View`
-  height: 90%;
-  padding: 16px 0 40px 0;
+  flex: 1;
+  padding-top: 16px;
 `;
 
 export const Card = styled.TouchableOpacity.attrs({
@@ -11,4 +11,21 @@ export const Card = styled.TouchableOpacity.attrs({
   margin: 8px;
   align-items: center;
   justify-content: center;
+`;
+
+export const GifImage = styled.Image`
+  width: 100px;
+  height: 100px;
+`;
+
+export const EmptyListContainer = styled.View`
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const EmptyListMessage = styled.Text`
+  font-size: 16px;
+  font-weight: 400;
+  color: ${({ theme }) => theme.colors.text};
 `;

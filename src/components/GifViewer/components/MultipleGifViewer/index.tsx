@@ -1,43 +1,50 @@
 import React, { useCallback } from "react";
+import { FlatList, ListRenderItem } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { FlatList, Image, ListRenderItem } from "react-native";
 
 import { IGifs } from "src/@types/gifs";
-import { Card, Container } from "./styles";
+import { StackRoutes } from "src/@types/@react-navigation";
+
+import * as S from "./styles";
 
 interface IGifViewerProps {
   gif: IGifs[] | null;
 }
 
-export function MultipleGifViewer({ gif }: IGifViewerProps) {
+export function MultipleGifViewer({ gif }: Readonly<IGifViewerProps>) {
   const { navigate } = useNavigation();
 
   const renderItem: ListRenderItem<IGifs> = useCallback(
     ({ item }) => (
-      <Card onPress={() => onDetailPageNavigate(item?.id)}>
-        <Image
-          style={{ width: 100, height: 100 }}
-          source={{ uri: item?.images?.fixed_width_still?.url }}
-        />
-      </Card>
+      <S.Card onPress={() => onDetailPageNavigate(item?.id)}>
+        <S.GifImage source={{ uri: item?.images?.fixed_width_still?.url }} />
+      </S.Card>
     ),
     []
   );
 
+  const listEmptyComponent = () => (
+    <S.EmptyListContainer>
+      <S.EmptyListMessage>No gifs found</S.EmptyListMessage>
+    </S.EmptyListContainer>
+  );
+
   function onDetailPageNavigate(gifId: string): void {
-    navigate("DetailPage", { gifId });
+    navigate(StackRoutes.DetailPage, { gifId });
   }
 
   return (
-    <Container>
+    <S.Container>
       <FlatList
         data={gif}
         numColumns={3}
         horizontal={false}
         renderItem={renderItem}
         keyExtractor={(item) => item?.id}
+        contentContainerStyle={{ flexGrow: 1 }}
         showsVerticalScrollIndicator={false}
+        ListEmptyComponent={listEmptyComponent}
       />
-    </Container>
+    </S.Container>
   );
 }
