@@ -1,48 +1,40 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 
-import { PageView } from "../../components/PageView";
-import { GifViewer } from "../../components/GifViewer";
-import { FailureModal } from "../../components/FailureModal";
+import { PageView } from "src/components/PageView";
+import { GifViewer } from "src/components/GifViewer";
+import { FailureModal } from "src/components/FailureModal";
 
-import { useGifDetail } from "../../zustand/gifDetail";
-import { ScreenProps } from "../../@types/@react-navigation";
+import { IGifs } from "src/@types/gifs";
+import { useFetch } from "src/hooks/useFetch";
+import { getGifById } from "src/service/network/gif";
+import { ScreenProps, StackRoutes } from "src/@types/@react-navigation";
 
 import { ChevronLeftIcon, Container } from "./styles";
 
-export function DetailPage({ route }: ScreenProps<"DetailPage">) {
-  const { gifId } = route?.params;
-  const { data, error, loading, getGifDetail } = useGifDetail();
+export function DetailPage({
+  route,
+}: Readonly<ScreenProps<StackRoutes.DetailPage>>) {
+  const { gifId } = route.params;
 
-  const [isFailureModalVisible, updateFailureModalVisibility] = useState(false);
+  const [isFailureModalVisible, setIsFailureModalVisible] = useState(false);
 
-  const gifTitle = useMemo(() => {
-    const titleLength = data?.title?.length;
+  const { error, response, isLoading } = useFetch<IGifs>({
+    queryKey: "getGifById",
+    queryFunction: () => getGifById(gifId),
+  });
 
-    return !!titleLength && titleLength > 30
-      ? `${data?.title.substring(0, 27)}...`
-      : data?.title;
-  }, [data?.title]);
-
-  function onUpdateFailureModalVisibility(): void {
-    updateFailureModalVisibility((oldState) => !oldState);
-  }
+  const onUpdateFailureModalVisibility = () => {
+    setIsFailureModalVisible((oldState) => !oldState);
+  };
 
   useEffect(() => {
-    if (gifId !== "") {
-      getGifDetail(gifId);
-    }
-  }, [gifId]);
-
-  useEffect(() => {
-    if (!!error) {
-      onUpdateFailureModalVisibility();
-    }
+    if (error) onUpdateFailureModalVisibility();
   }, [error]);
 
   return (
-    <PageView headerTitle={gifTitle} leftIcon={ChevronLeftIcon}>
+    <PageView headerTitle={response?.title} leftIcon={ChevronLeftIcon}>
       <Container>
-        <GifViewer gif={data} isLoading={loading} />
+        <GifViewer gif={response} isLoading={isLoading} />
       </Container>
 
       <FailureModal
