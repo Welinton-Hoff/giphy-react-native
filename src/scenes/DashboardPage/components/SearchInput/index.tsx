@@ -14,7 +14,7 @@ interface ISearchProps extends TextInputProps {
   fetchInterval: () => void;
 }
 
-export function Search(props: Readonly<ISearchProps>) {
+export function SearchInput(props: Readonly<ISearchProps>) {
   const { fetchInterval, ...rest } = props;
   const { handleAnimation, searchContainerWidth, buttonContainerOpacity } =
     useSearchAnimation();

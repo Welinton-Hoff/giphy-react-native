@@ -1,8 +1,8 @@
 import React, { useMemo, useState, useEffect, useCallback } from "react";
 
-import { Search } from "./components/Search";
 import { PageView } from "src/components/PageView";
 import { GifViewer } from "src/components/GifViewer";
+import { SearchInput } from "./components/SearchInput";
 import { FailureModal } from "src/components/FailureModal";
 
 import { useGifs } from "src/zustand/gifs";
@@ -68,7 +68,7 @@ export function DashboardPage() {
   return (
     <PageView disableHeader>
       <S.Container>
-        <Search
+        <SearchInput
           onBlur={handleFetchInterval}
           onFocus={onClearFetchInterval}
           fetchInterval={onRestartFetchInterval}
