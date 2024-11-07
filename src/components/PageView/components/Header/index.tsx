@@ -3,8 +3,8 @@ import { SvgProps } from "react-native-svg";
 import { TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-import { SvgIcon } from "../SvgIcon";
-import { capitalize } from "../../utils/string";
+import { capitalize } from "src/utils/string";
+import { SvgIcon } from "src/components/SvgIcon";
 
 import * as S from "./styles";
 
