@@ -4,6 +4,8 @@ import { useNavigation } from "@react-navigation/native";
 import { Content, Page, SplashIcon } from "./styles";
 import { StackRoutes } from "src/@types/@react-navigation";
 
+const SPLASH_ANIMATION_TIME = 7000;
+
 export function SplashScreenPage() {
   const { reset } = useNavigation();
 
@@ -12,7 +14,7 @@ export function SplashScreenPage() {
   }
 
   useEffect(() => {
-    const timer = setTimeout(onDashboardPageNavigate, 7000);
+    const timer = setTimeout(onDashboardPageNavigate, SPLASH_ANIMATION_TIME);
     return () => clearTimeout(timer);
   }, []);
 

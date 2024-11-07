@@ -21,9 +21,7 @@ interface ITextFieldProps extends TextInputProps {
 export function TextField(props: Readonly<ITextFieldProps>) {
   const { value, leftIcon, onChangeText, onClear, ...rest } = props;
 
-  const shouldDisplayClearFieldAction = useMemo(() => {
-    return !!value?.length;
-  }, [value]);
+  const shouldDisplayClearFieldAction = useMemo(() => !!value?.length, [value]);
 
   function onClearField(): void {
     if (onClear && onChangeText) {

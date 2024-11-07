@@ -2,7 +2,7 @@ import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import theme from "src/theme";
-import { Header, IHeaderProps } from "../Header";
+import { Header, IHeaderProps } from "./components/Header";
 import { IStatusBarProps, StatusBar } from "./components/StatusBar";
 
 interface IPageViewProps extends IHeaderProps, IStatusBarProps {

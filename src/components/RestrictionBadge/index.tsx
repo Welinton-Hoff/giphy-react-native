@@ -1,7 +1,8 @@
 import React from "react";
 
 import { EGifRating } from "src/@types/gifs";
-import { getRatingAge } from "src/utils/rating";
+import { useRatingBadge } from "./hooks/useRatingBadge";
+
 import { AgeRestrictionBadge, Container } from "./styles";
 
 interface IRestrictionBadgeProps {
@@ -9,7 +10,7 @@ interface IRestrictionBadgeProps {
 }
 
 export function RestrictionBadge({ rating }: Readonly<IRestrictionBadgeProps>) {
-  const ageRestriction = getRatingAge(rating);
+  const ageRestriction = useRatingBadge(rating);
 
   return (
     <Container rating={rating}>
