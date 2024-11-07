@@ -1,6 +1,6 @@
-import { EGifRating } from "../../@types/gifs";
+import { EGifRating } from "src/@types/gifs";
 
-function getRatingAge(rating: EGifRating) {
+export function useRatingBadge(rating: EGifRating) {
   const ratingTemplate = {
     [EGifRating.G]: "0 +",
     [EGifRating.R]: "18 +",
@@ -10,5 +10,3 @@ function getRatingAge(rating: EGifRating) {
 
   return ratingTemplate[rating];
 }
-
-export { getRatingAge };
